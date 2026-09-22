@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — Putra Weather</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body data-theme="dark" data-page-title="aboutTitle">
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <i data-lucide="wind"></i> Putra Weather
+            </div>
+            <nav>
+                <a href="index.html" data-i18n="dashboard">Dashboard</a>
+                <a href="analytics.html" data-i18n="analytics">Analytics</a>
+                <a href="malaysia.html" data-i18n="malaysia">Malaysia</a>
+                <a href="world.html" data-i18n="world">World</a>
+                <a href="about.html" class="active" data-i18n="about">About</a>
+
+                <button id="lang-toggle" title="Switch language" style="background: transparent; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; padding: 0.5rem 0.75rem; cursor: pointer; font-weight: 600; font-size: 0.85rem; min-width: 42px;">EN</button>
+
+                <button id="theme-toggle" title="Toggle theme" style="background: transparent; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; padding: 0.5rem; cursor: pointer; display: flex; align-items: center;">
+                    <i data-lucide="moon" style="width: 16px; height: 16px;" id="theme-icon"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main style="display: block; max-width: 100%; padding: 0;">
+
+        <!-- HERO BANNER -->
+        <section class="about-hero">
+            <div class="about-hero-content">
+                <div class="about-hero-icon">
+                    <i data-lucide="wind"></i>
+                </div>
+                <h1 data-i18n="aboutTitle">About Putra Weather</h1>
+                <p data-i18n="aboutSubtitle">Real-time air quality and weather information for Malaysia</p>
+            </div>
+        </section>
+
+        <div class="about-container">
+
+            <!-- WHAT IS PUTRA WEATHER -->
+            <section class="about-section">
+                <div class="about-section-header">
+                    <div class="about-section-icon" style="background: linear-gradient(135deg, #a855f7, #7c3aed);">
+                        <i data-lucide="sparkles"></i>
+                    </div>
+                    <h2 data-i18n="whatIs">What is Putra Weather?</h2>
+                </div>
+                <p class="about-text" data-i18n="whatIsDesc">
+                    Putra Weather is a personal air quality and weather dashboard that provides real-time
+                    Air Pollutant Index (IPU) readings, PM2.5 concentrations, and current weather conditions
+                    for Malaysia and cities around the world. It uses official data from the Malaysian
+                    Department of Environment (JAS) via AQICN, and weather data from Open-Meteo.
+                </p>
+            </section>
+
+            <!-- DATA SOURCES -->
+            <section class="about-section">
+                <div class="about-section-header">
+                    <div class="about-section-icon" style="background: linear-gradient(135deg, #3b82f6, #2563eb);">
+                        <i data-lucide="database"></i>
+                    </div>
+                    <h2 data-i18n="dataSources">Data Sources</h2>
+                </div>
+                <div class="data-source-grid">
+
+                    <div class="data-source-card">
+                        <div class="data-source-icon" style="background: linear-gradient(135deg, #22c55e, #16a34a);">
+                            <i data-lucide="landmark"></i>
+                        </div>
+                        <h3 data-i18n="sourceJAS">JAS Malaysia</h3>
+                        <p data-i18n="sourceJASDesc">Official Air Pollutant Index (IPU) readings from Malaysian monitoring stations.</p>
+                    </div>
+
+                    <div class="data-source-card">
+                        <div class="data-source-icon" style="background: linear-gradient(135deg, #f59e0b, #d97706);">
+                            <i data-lucide="globe"></i>
+                        </div>
+                        <h3 data-i18n="sourceAQICN">AQICN</h3>
+                        <p data-i18n="sourceAQICNDesc">Global air quality data aggregator that provides access to JAS Malaysia's data.</p>
+                    </div>
+
+                    <div class="data-source-card">
+                        <div class="data-source-icon" style="background: linear-gradient(135deg, #06b6d4, #0891b2);">
+                            <i data-lucide="cloud-sun"></i>
+                        </div>
+                        <h3 data-i18n="sourceOpenMeteo">Open-Meteo</h3>
+                        <p data-i18n="sourceOpenMeteoDesc">Free weather forecast and air quality forecast API used for current weather and 7-day PM2.5 predictions.</p>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- DISCLAIMER -->
+            <section class="about-section disclaimer-section">
+                <div class="about-section-header">
+                    <div class="about-section-icon" style="background: linear-gradient(135deg, #eab308, #ca8a04);">
+                        <i data-lucide="alert-triangle"></i>
+                    </div>
+                    <h2 data-i18n="disclaimer">Disclaimer</h2>
+                </div>
+                <p class="about-text" data-i18n="disclaimerDesc">
+                    Putra Weather is a personal project and is NOT an official government tool.
+                    While we strive to display accurate real-time data from JAS Malaysia, this
+                    dashboard should not be used as the sole source for critical decisions.
+                    For official readings and health advisories, please refer to the Malaysian
+                    Department of Environment (JAS) website.
+                </p>
+            </section>
+
+            <!-- CONTACT -->
+            <section class="about-section contact-section">
+                <div class="about-section-header">
+                    <div class="about-section-icon" style="background: linear-gradient(135deg, #ec4899, #db2777);">
+                        <i data-lucide="mail"></i>
+                    </div>
+                    <h2 data-i18n="contact">Contact</h2>
+                </div>
+                <p class="about-text" style="margin-bottom: 1.25rem;">
+                    <span data-i18n="contactMessage">Have questions, feedback, or suggestions? Reach out by email.</span>
+                </p>
+                <a href="mailto:putraahmadfakhrullah@icloud.com" class="contact-button">
+                    <i data-lucide="mail"></i>
+                    <span>putraahmadfakhrullah@icloud.com</span>
+                    <i data-lucide="arrow-right"></i>
+                </a>
+            </section>
+
+            <!-- CREDITS -->
+            <section class="about-section credits-section">
+                <div class="about-section-header">
+                    <div class="about-section-icon" style="background: linear-gradient(135deg, #64748b, #475569);">
+                        <i data-lucide="code-2"></i>
+                    </div>
+                    <h2 data-i18n="credits">Credits</h2>
+                </div>
+                <p class="about-text" data-i18n="creditsDesc">
+                    Built with care using vanilla JavaScript, Leaflet Maps, and Chart.js.
+                    Data provided by JAS Malaysia, AQICN, and Open-Meteo.
+                </p>
+            </section>
+
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="about-footer">
+            <div class="about-footer-content">
+                <div class="about-footer-logo">
+                    <i data-lucide="wind"></i> Putra Weather
+                </div>
+                <p>© 2026 Putra Weather · Built by Putra Ahmad Fakhrullah Jafri</p>
+            </div>
+        </footer>
+
+    </main>
+
+    <script src="i18n.js"></script>
+    <script>
+        lucide.createIcons();
+        (function initTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            body.setAttribute('data-theme', savedTheme);
+            updateIcon(savedTheme);
+
+            function updateIcon(theme) {
+                if (!themeIcon) return;
+                themeIcon.setAttribute('data-lucide', theme === 'dark' ? 'moon' : 'sun');
+                if (window.lucide) lucide.createIcons();
+            }
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const current = body.getAttribute('data-theme');
+                    const next = current === 'dark' ? 'light' : 'dark';
+                    body.setAttribute('data-theme', next);
+                    localStorage.setItem('theme', next);
+                    updateIcon(next);
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

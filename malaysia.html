@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malaysia Overview — Putra Weather</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body data-theme="dark" data-page-title="malaysiaTitle">
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <i data-lucide="wind"></i> Putra Weather
+            </div>
+            <nav>
+                <a href="index.html" data-i18n="dashboard">Dashboard</a>
+                <a href="analytics.html" data-i18n="analytics">Analytics</a>
+                <a href="malaysia.html" class="active" data-i18n="malaysia">Malaysia</a>
+                <a href="world.html" data-i18n="world">World</a>
+                <a href="about.html" data-i18n="about">About</a>
+
+                <button id="lang-toggle" title="Switch language" style="background: transparent; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; padding: 0.5rem 0.75rem; cursor: pointer; font-weight: 600; font-size: 0.85rem; min-width: 42px;">EN</button>
+
+                <button id="theme-toggle" title="Toggle theme" style="background: transparent; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; padding: 0.5rem; cursor: pointer; display: flex; align-items: center;">
+                    <i data-lucide="moon" style="width: 16px; height: 16px;" id="theme-icon"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <h1 style="grid-column: 1 / -1; text-align: center; margin-bottom: 1rem;" data-i18n="malaysiaTitle">Malaysia Air Quality — Live</h1>
+
+        <section id="national-summary" class="iqair-card" style="background: linear-gradient(135deg, #6a1b9a 0%, #a855f7 100%);">
+            <h2 style="margin-bottom: 1.5rem; font-size: 1.15rem;" data-i18n="nationalSummary">National Summary</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem;">
+                <div>
+                    <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 0.5rem;" data-i18n="averageIPU">Average IPU</div>
+                    <div style="font-size: 3rem; font-weight: 800; line-height: 1;" id="avg-ipu">--</div>
+                    <div style="font-size: 0.95rem; opacity: 0.9; margin-top: 0.3rem;" id="avg-category">--</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 0.5rem;" data-i18n="worstAir">Worst Air Quality</div>
+                    <div style="font-size: 1.5rem; font-weight: 700; line-height: 1.2;" id="worst-state">--</div>
+                    <div style="font-size: 0.95rem; opacity: 0.9; margin-top: 0.3rem;" id="worst-ipu">--</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 0.5rem;" data-i18n="bestAir">Best Air Quality</div>
+                    <div style="font-size: 1.5rem; font-weight: 700; line-height: 1.2;" id="best-state">--</div>
+                    <div style="font-size: 0.95rem; opacity: 0.9; margin-top: 0.3rem;" id="best-ipu">--</div>
+                </div>
+                <div>
+                    <div style="font-size: 0.85rem; opacity: 0.85; margin-bottom: 0.5rem;" data-i18n="stationsReporting">Stations Reporting</div>
+                    <div style="font-size: 3rem; font-weight: 800; line-height: 1;" id="station-count">--</div>
+                    <div style="font-size: 0.95rem; opacity: 0.9; margin-top: 0.3rem;" data-i18n="of12">of 12</div>
+                </div>
+            </div>
+            <div style="margin-top: 1.5rem; font-size: 0.85rem; opacity: 0.8;" id="malaysia-updated">
+                Last updated: --
+            </div>
+        </section>
+
+        <section id="malaysia-grid" class="card" style="grid-column: 1 / -1;">
+            <h2><i data-lucide="map-pin"></i> <span data-i18n="allStates">All States</span></h2>
+            <p style="opacity: 0.7; font-size: 0.9rem; margin-bottom: 1rem;" data-i18n="sortedByWorst">Sorted by worst air quality first</p>
+            <div id="state-cards" class="state-cards-container">
+                <p style="opacity: 0.7;">Loading all 12 stations...</p>
+            </div>
+        </section>
+    </main>
+
+    <script src="i18n.js"></script>
+    <script src="malaysia.js"></script>
+    <script>
+        lucide.createIcons();
+
+        (function initTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            body.setAttribute('data-theme', savedTheme);
+            updateIcon(savedTheme);
+
+            function updateIcon(theme) {
+                if (!themeIcon) return;
+                themeIcon.setAttribute('data-lucide', theme === 'dark' ? 'moon' : 'sun');
+                if (window.lucide) lucide.createIcons();
+            }
+
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const current = body.getAttribute('data-theme');
+                    const next = current === 'dark' ? 'light' : 'dark';
+                    body.setAttribute('data-theme', next);
+                    localStorage.setItem('theme', next);
+                    updateIcon(next);
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

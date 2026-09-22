@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Putra Weather & IPU</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body data-theme="dark" data-page-title="pageTitle">
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <i data-lucide="wind"></i> Putra Weather
+            </div>
+            <nav>
+                <a href="index.html" class="active" data-i18n="dashboard">Dashboard</a>
+                <a href="analytics.html" data-i18n="analytics">Analytics</a>
+                <a href="malaysia.html" data-i18n="malaysia">Malaysia</a>
+                <a href="world.html" data-i18n="world">World</a>
+                <a href="about.html" data-i18n="about">About</a>
+
+                <div class="state-selector">
+                    <label for="state-dropdown" data-i18n="location">Location:</label>
+                    <select id="state-dropdown">
+                        <option value="@002626" data-lat="3.106" data-lon="101.718" selected>Kuala Lumpur (Cheras)</option>
+                        <option value="@002620" data-lat="3.133" data-lon="101.608">Petaling Jaya</option>
+                        <option value="@002621" data-lat="3.105" data-lon="101.556">Shah Alam</option>
+                        <option value="@010485" data-lat="2.915" data-lon="101.690">Putrajaya</option>
+                        <option value="@002619" data-lat="3.015" data-lon="101.413">Klang</option>
+                        <option value="@002578" data-lat="1.495" data-lon="103.736">Johor Bahru</option>
+                        <option value="@002586" data-lat="2.191" data-lon="102.257">Melaka</option>
+                        <option value="@002594" data-lat="4.629" data-lon="101.117">Ipoh</option>
+                        <option value="@002600" data-lat="5.329" data-lon="100.443">Perai (Penang)</option>
+                        <option value="@002592" data-lat="3.819" data-lon="103.297">Kuantan</option>
+                        <option value="@002610" data-lat="1.562" data-lon="110.389">Kuching</option>
+                        <option value="@002604" data-lat="5.894" data-lon="116.043">Kota Kinabalu</option>
+                    </select>
+                </div>
+
+                <button id="notify-btn" title="Enable notifications" style="background: transparent; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; padding: 0.5rem; cursor: pointer; display: flex; align-items: center; gap: 0.3rem;">
+                    <i data-lucide="bell" style="width: 16px; height: 16px;"></i>
+                </button>
+
+                <button id="lang-toggle" title="Switch language" style="background: transparent; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; padding: 0.5rem 0.75rem; cursor: pointer; font-weight: 600; font-size: 0.85rem; min-width: 42px;">EN</button>
+
+                <button id="theme-toggle" title="Toggle theme" style="background: transparent; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; padding: 0.5rem; cursor: pointer; display: flex; align-items: center;">
+                    <i data-lucide="moon" style="width: 16px; height: 16px;" id="theme-icon"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <h1 style="grid-column: 1 / -1; text-align: center; margin-bottom: 1rem;" data-i18n="pageTitle">Live Weather & Air Quality</h1>
+
+        <section id="hero-card" class="iqair-card">
+            <div class="hero-top">
+                <div class="aqi-box">
+                    <span id="hero-aqi">--</span>
+                    <span id="hero-category">Loading...</span>
+                </div>
+                <div class="weather-icon">
+                    <i data-lucide="activity" id="hero-icon"></i>
+                </div>
+            </div>
+            <div class="hero-bottom">
+                <p><strong data-i18n="location">Location:</strong> <span id="hero-station">Loading...</span></p>
+                <p><strong data-i18n="mainPollutant">Main pollutant:</strong> <span id="hero-pollutant">--</span></p>
+                <p><strong>PM2.5:</strong> <span id="hero-pm25">--</span> µg/m³</p>
+            </div>
+            <div class="hero-stats">
+                <div><i data-lucide="thermometer"></i> <span id="hero-temp">--</span>°C</div>
+                <div><i data-lucide="wind"></i> <span id="hero-wind">--</span> km/h</div>
+                <div><i data-lucide="droplets"></i> <span id="hero-humidity">--</span>%</div>
+            </div>
+            <div class="hero-updated" id="hero-updated">Last updated: --</div>
+        </section>
+
+        <section id="weather" class="card">
+            <h2><i data-lucide="cloud-sun"></i> <span data-i18n="currentWeather">Current Weather</span></h2>
+            <div id="weather-data">
+                <p><span data-i18n="temperature">Temperature</span>: <span id="current-temp">--</span>°C</p>
+                <p><span data-i18n="humidity">Humidity</span>: <span id="current-humidity">--</span>%</p>
+                <p><span data-i18n="wind">Wind</span>: <span id="current-wind">--</span> km/h</p>
+                <p><span data-i18n="condition">Condition</span>: <span id="current-condition">--</span></p>
+            </div>
+        </section>
+
+        <section id="air-quality" class="card">
+            <h2><i data-lucide="factory"></i> <span data-i18n="airPollutantIndex">Air Pollutant Index (IPU)</span></h2>
+            <div id="ipu-data">
+                <p><span data-i18n="station">Station</span>: <span id="ipu-station">--</span></p>
+                <p>IPU: <span id="ipu-value">--</span></p>
+                <p><span data-i18n="status">Status</span>: <span id="ipu-category">--</span></p>
+                <p>PM2.5: <span id="ipu-pm25">--</span> µg/m³</p>
+            </div>
+        </section>
+
+        <section id="history" class="card" style="grid-column: 1 / -1;">
+            <h2><i data-lucide="bar-chart-3"></i> <span data-i18n="hour24Trend">24-Hour Air Quality Trend</span></h2>
+            <div style="position: relative; height: 300px;">
+                <canvas id="historyChart"></canvas>
+            </div>
+        </section>
+
+        <section id="forecast" class="card" style="grid-column: 1 / -1;">
+            <h2><i data-lucide="calendar-days"></i> <span data-i18n="pm25Forecast">PM2.5 Forecast (Next 7 Days)</span></h2>
+            <div id="forecast-data">Loading...</div>
+        </section>
+
+        <section id="map-section" class="card" style="grid-column: 1 / -1;">
+            <h2><i data-lucide="map"></i> <span data-i18n="liveMap">Live Weather & Air Quality Map</span></h2>
+            <div id="map" style="height: 400px; border-radius: 8px;"></div>
+        </section>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+    <script src="i18n.js"></script>
+    <script src="script.js"></script>
+    <script src="notify.js"></script>
+    <script>
+        lucide.createIcons();
+        (function initTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            body.setAttribute('data-theme', savedTheme);
+            updateIcon(savedTheme);
+            function updateIcon(theme) {
+                if (!themeIcon) return;
+                themeIcon.setAttribute('data-lucide', theme === 'dark' ? 'moon' : 'sun');
+                if (window.lucide) lucide.createIcons();
+            }
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const current = body.getAttribute('data-theme');
+                    const next = current === 'dark' ? 'light' : 'dark';
+                    body.setAttribute('data-theme', next);
+                    localStorage.setItem('theme', next);
+                    updateIcon(next);
+                    if (typeof window.updateChartTheme === 'function') window.updateChartTheme(next);
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

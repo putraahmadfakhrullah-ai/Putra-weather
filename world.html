@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Map — Putra Weather</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body data-theme="dark" data-page-title="worldTitle">
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <i data-lucide="wind"></i> Putra Weather
+            </div>
+            <nav>
+                <a href="index.html" data-i18n="dashboard">Dashboard</a>
+                <a href="analytics.html" data-i18n="analytics">Analytics</a>
+                <a href="malaysia.html" data-i18n="malaysia">Malaysia</a>
+                <a href="world.html" class="active" data-i18n="world">World</a>
+                <a href="about.html" data-i18n="about">About</a>
+
+                <button id="lang-toggle" title="Switch language" style="background: transparent; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; padding: 0.5rem 0.75rem; cursor: pointer; font-weight: 600; font-size: 0.85rem; min-width: 42px;">EN</button>
+
+                <button id="theme-toggle" title="Toggle theme" style="background: transparent; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; padding: 0.5rem; cursor: pointer; display: flex; align-items: center;">
+                    <i data-lucide="moon" style="width: 16px; height: 16px;" id="theme-icon"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main style="display: block;">
+        <h1 style="text-align: center; margin-bottom: 0.5rem;" data-i18n="worldTitle">World Air Quality Map</h1>
+        <p style="text-align: center; opacity: 0.7; margin-bottom: 1.5rem; font-size: 0.95rem;" data-i18n="worldSubtitle">
+            Real-time air quality stations from around the world. Pan and zoom to explore.
+        </p>
+
+        <!-- LEGEND -->
+        <div class="world-legend">
+            <div class="legend-item"><span class="legend-dot" style="background:#00e400;"></span> <span data-i18n="good">Good</span> (0-50)</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#f5c500;"></span> <span data-i18n="moderate">Moderate</span> (51-100)</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#ff7e00;"></span> <span data-i18n="unhealthy">Unhealthy</span> (101-200)</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#ef4444;"></span> <span data-i18n="veryUnhealthy">Very Unhealthy</span> (201-300)</div>
+            <div class="legend-item"><span class="legend-dot" style="background:#a855f7;"></span> <span data-i18n="hazardous">Hazardous</span> (301+)</div>
+        </div>
+
+        <!-- MAP -->
+        <section class="card" style="padding: 0; overflow: hidden;">
+            <div id="worldMap" style="height: 600px;"></div>
+        </section>
+
+        <!-- STATS -->
+        <section class="world-stats">
+            <div class="world-stat-card">
+                <div class="world-stat-label" data-i18n="stationsVisible">Stations Visible</div>
+                <div class="world-stat-value" id="stations-visible">0</div>
+            </div>
+            <div class="world-stat-card">
+                <div class="world-stat-label" data-i18n="avgVisible">Average IPU</div>
+                <div class="world-stat-value" id="avg-visible">--</div>
+            </div>
+            <div class="world-stat-card">
+                <div class="world-stat-label" data-i18n="worstVisible">Worst Visible</div>
+                <div class="world-stat-value" id="worst-visible">--</div>
+            </div>
+            <div class="world-stat-card">
+                <div class="world-stat-label" data-i18n="bestVisible">Best Visible</div>
+                <div class="world-stat-value" id="best-visible">--</div>
+            </div>
+        </section>
+    </main>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="i18n.js"></script>
+    <script src="world.js"></script>
+    <script>
+        lucide.createIcons();
+
+        (function initTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            body.setAttribute('data-theme', savedTheme);
+            updateIcon(savedTheme);
+
+            function updateIcon(theme) {
+                if (!themeIcon) return;
+                themeIcon.setAttribute('data-lucide', theme === 'dark' ? 'moon' : 'sun');
+                if (window.lucide) lucide.createIcons();
+            }
+
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const current = body.getAttribute('data-theme');
+                    const next = current === 'dark' ? 'light' : 'dark';
+                    body.setAttribute('data-theme', next);
+                    localStorage.setItem('theme', next);
+                    updateIcon(next);
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics — Putra Weather</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body data-theme="dark" data-page-title="analyticsTitle">
+
+    <header>
+        <div class="nav-container">
+            <div class="logo">
+                <i data-lucide="wind"></i> Putra Weather
+            </div>
+            <nav>
+                <a href="index.html" data-i18n="dashboard">Dashboard</a>
+                <a href="analytics.html" class="active" data-i18n="analytics">Analytics</a>
+                <a href="malaysia.html" data-i18n="malaysia">Malaysia</a>
+                <a href="world.html" data-i18n="world">World</a>
+                <a href="about.html" data-i18n="about">About</a>
+
+                <div class="state-selector">
+                    <label for="state-dropdown" data-i18n="location">Location:</label>
+                    <select id="state-dropdown">
+                        <option value="@002626" data-lat="3.106" data-lon="101.718">Kuala Lumpur (Cheras)</option>
+                        <option value="@002620" data-lat="3.133" data-lon="101.608">Petaling Jaya</option>
+                        <option value="@002621" data-lat="3.105" data-lon="101.556">Shah Alam</option>
+                        <option value="@010485" data-lat="2.915" data-lon="101.690">Putrajaya</option>
+                        <option value="@002619" data-lat="3.015" data-lon="101.413">Klang</option>
+                        <option value="@002578" data-lat="1.495" data-lon="103.736">Johor Bahru</option>
+                        <option value="@002586" data-lat="2.191" data-lon="102.257">Melaka</option>
+                        <option value="@002594" data-lat="4.629" data-lon="101.117">Ipoh</option>
+                        <option value="@002600" data-lat="5.329" data-lon="100.443">Perai (Penang)</option>
+                        <option value="@002592" data-lat="3.819" data-lon="103.297">Kuantan</option>
+                        <option value="@002610" data-lat="1.562" data-lon="110.389">Kuching</option>
+                        <option value="@002604" data-lat="5.894" data-lon="116.043">Kota Kinabalu</option>
+                    </select>
+                </div>
+
+                <button id="notify-btn" title="Enable notifications" style="background: transparent; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; padding: 0.5rem; cursor: pointer; display: flex; align-items: center;">
+                    <i data-lucide="bell" style="width: 16px; height: 16px;"></i>
+                </button>
+
+                <button id="lang-toggle" title="Switch language" style="background: transparent; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; padding: 0.5rem 0.75rem; cursor: pointer; font-weight: 600; font-size: 0.85rem; min-width: 42px;">EN</button>
+
+                <button id="theme-toggle" title="Toggle theme" style="background: transparent; border: 1px solid #334155; border-radius: 8px; color: #e2e8f0; padding: 0.5rem; cursor: pointer; display: flex; align-items: center;">
+                    <i data-lucide="moon" style="width: 16px; height: 16px;" id="theme-icon"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <h1 style="grid-column: 1 / -1; text-align: center; margin-bottom: 1.5rem; font-size: 2rem; font-weight: 700;" data-i18n="analyticsTitle">Analytics</h1>
+
+        <section class="card" style="grid-column: 1 / -1;">
+            <h2><i data-lucide="info"></i> <span data-i18n="currentStation">Current Station</span></h2>
+            <p><span data-i18n="station">Station</span>: <span id="analytics-station">Loading...</span></p>
+            <p><span data-i18n="currentIPU">Current IPU</span>: <span id="analytics-ipu">--</span> · <span id="analytics-category">--</span></p>
+            <p>PM2.5: <span id="analytics-pm25">--</span> µg/m³</p>
+        </section>
+
+        <section class="card" style="grid-column: 1 / -1;">
+            <h2><i data-lucide="trending-up"></i> <span data-i18n="pm25Trend">PM2.5 — 7-Day Forecast Trend</span></h2>
+            <div style="position: relative; height: 300px; margin-top: 1rem;">
+                <canvas id="trendChart"></canvas>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2><i data-lucide="pie-chart"></i> <span data-i18n="pollutantBreakdown">Pollutant Breakdown</span></h2>
+            <div style="position: relative; height: 300px; margin-top: 1rem;">
+                <canvas id="pollutantChart"></canvas>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2><i data-lucide="bar-chart-2"></i> <span data-i18n="hourlySnapshot">Hourly Snapshot</span></h2>
+            <div style="position: relative; height: 300px; margin-top: 1rem;">
+                <canvas id="hourlyChart"></canvas>
+            </div>
+        </section>
+    </main>
+
+    <script src="i18n.js"></script>
+    <script src="analytics.js"></script>
+    <script>
+        lucide.createIcons();
+        (function initTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            body.setAttribute('data-theme', savedTheme);
+            updateIcon(savedTheme);
+
+            function updateIcon(theme) {
+                if (!themeIcon) return;
+                themeIcon.setAttribute('data-lucide', theme === 'dark' ? 'moon' : 'sun');
+                if (window.lucide) lucide.createIcons();
+            }
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const current = body.getAttribute('data-theme');
+                    const next = current === 'dark' ? 'light' : 'dark';
+                    body.setAttribute('data-theme', next);
+                    localStorage.setItem('theme', next);
+                    updateIcon(next);
+                });
+            }
+        })();
+    </script>
+</body>
+</html>
